@@ -27,10 +27,10 @@ class PageResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('title.en')
                     ->label(__('Page title').' ('.get_language_exonym('en').')')
-                    ->requiredWithout('title.fr'),
+                    ->disabled(),
                 Forms\Components\TextInput::make('title.fr')
                     ->label(__('Page title').' ('.get_language_exonym('fr').')')
-                    ->requiredWithout('title.en'),
+                    ->disabled(),
                 Forms\Components\MarkdownEditor::make('content.en')
                     ->disableToolbarButtons(['attachFiles'])
                     ->label(__('Content').' ('.get_language_exonym('en').')')

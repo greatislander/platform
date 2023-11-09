@@ -1,6 +1,7 @@
 <?php
 
 use App\Filament\Resources\PageResource;
+use App\Filament\Resources\PageResource\Pages\EditPage;
 use App\Filament\Resources\PageResource\Pages\ListPages;
 use App\Models\Page;
 use App\Models\User;
@@ -116,6 +117,25 @@ test('only site admins users can access Page admin pages', function () {
     actingAs($administrator)->get(PageResource::getUrl('edit', [
         'record' => Page::factory()->create(),
     ]))->assertSuccessful();
+});
+
+test('pages can be edited without affecting title', function () {
+    $page = Page::factory()->create();
+
+    livewire(EditPage::class, [
+        'record' => $page->getRouteKey(),
+    ])->assertFormSet([
+        'content.en' => $page->content,
+        'title.en' => $page->title,
+    ])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    $newPage = $page->fresh();
+
+    expect($newPage)
+        ->content->toBe($page->content)
+        ->title->toBe($page->title);
 });
 
 test('Pages can be listed in the admin panel', function () {
